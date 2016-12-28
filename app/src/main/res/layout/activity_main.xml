@@ -10,6 +10,7 @@
 
 
     <TextView
+        android:visibility="gone"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:id="@+id/errorText"
@@ -17,6 +18,7 @@
         android:layout_height="wrap_content"/>
 
     <ProgressBar
+        android:visibility="gone"
         android:id="@+id/loadingResultsProgressBar"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"

@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">Project10</string>
+    <string name="app_name">CapitolWords</string>
+    <string name="search_hint">Search</string>
 </resources>
