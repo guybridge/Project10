@@ -42,6 +42,16 @@ public class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.ViewHold
         holder.bindViewHolder(results.get(position));
     }
 
+    public void swap(ArrayList<Result> results)
+    {
+        if(results != null)
+        {
+            this.results = results;
+            notifyDataSetChanged();
+        }
+
+    }
+
     @Override
     public int getItemCount()
     {

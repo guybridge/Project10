@@ -5,7 +5,19 @@
         android:title="Search"
         android:id="@+id/action_search"
         android:icon="@mipmap/ic_search"
-        app:showAsAction="collapseActionView|ifRoom"
+        app:showAsAction="collapseActionView|always"
         app:actionViewClass="android.support.v7.widget.SearchView">
+    </item>
+    <item
+        android:title="Topics"
+        android:id="@+id/action_topics"
+        android:icon="@mipmap/ic_topics"
+        app:showAsAction="always">
+    </item>
+    <item
+        android:title="Playlists"
+        android:id="@+id/action_playlists"
+        android:icon="@mipmap/ic_playlist"
+        app:showAsAction="always">
     </item>
 </menu>
