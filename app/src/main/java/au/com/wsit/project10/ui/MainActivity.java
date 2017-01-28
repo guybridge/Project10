@@ -1,6 +1,8 @@
 package au.com.wsit.project10.ui;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -23,6 +25,7 @@ import java.util.ArrayList;
 
 import au.com.wsit.project10.R;
 import au.com.wsit.project10.adapters.ResultsAdapter;
+import au.com.wsit.project10.api.PopularHelper;
 import au.com.wsit.project10.api.SearchHelper;
 import au.com.wsit.project10.api.YouTubeApiService;
 import au.com.wsit.project10.model.Result;
@@ -40,6 +43,7 @@ public class MainActivity extends AppCompatActivity
     private ProgressBar resultsProgress;
     private RecyclerView resultsRecycler;
     private ResultsAdapter resultsAdapter;
+    private SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -52,6 +56,14 @@ public class MainActivity extends AppCompatActivity
         resultsRecycler.setLayoutManager(new LinearLayoutManager(this));
         resultsAdapter = new ResultsAdapter(this);
         resultsRecycler.setAdapter(resultsAdapter);
+        sharedPreferences = getSharedPreferences(Constants.PREFERENCES_FILE, Context.MODE_PRIVATE);
+
+        // Get the last thing searched
+        String lastSearchTerm = sharedPreferences.getString(Constants.LAST_SEARCH_TERM, "Android");
+
+        // Get the most popular to start with
+        search(lastSearchTerm);
+
 
     }
 
@@ -81,7 +93,6 @@ public class MainActivity extends AppCompatActivity
             @Override
             public boolean onQueryTextSubmit(String query)
             {
-                toggleProgress();
                 searchView.clearFocus();
                 search(searchView.getQuery().toString());
                 return true;
@@ -100,6 +111,9 @@ public class MainActivity extends AppCompatActivity
     // Start a search using the API call
     public void search(String term)
     {
+        sharedPreferences.edit().putString(Constants.LAST_SEARCH_TERM, term).apply();
+        toggleProgress();
+
         SearchHelper searchHelper = new SearchHelper();
         searchHelper.search(term, new SearchHelper.SearchCallback()
         {

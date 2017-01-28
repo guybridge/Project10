@@ -15,8 +15,13 @@ public interface YouTubeApiService
 {
     String YOUTUBE_SEARCH_BASE_URL = "https://www.googleapis.com/youtube/v3/";
 
-    // Example
+    // Examples
+
+    // Comments
     //https://www.googleapis.com/youtube/v3/commentThreads?key=AIzaSyBiMZ2eKQ2yKpblyxCm41AjMyvbQhLA3ZI&textFormat=plainText&part=snippet&videoId=kffacxfA7G4&maxResults=50
+
+    // Most Popular
+    // https://www.googleapis.com/youtube/v3/videos?chart=mostPopular&key={YOUR_API_KEY}&part=snippet&maxResults=4
 
 
     @GET("search?key=" + Constants.YOUTUBE_API_KEY + "&part=snippet&type=video&maxResults=50")
@@ -24,5 +29,8 @@ public interface YouTubeApiService
 
     @GET("commentThreads?key=" + Constants.YOUTUBE_API_KEY + "&textFormat=plainText&part=snippet&maxResults=30")
     Call<ResponseBody> comments(@Query("videoId") String videoId);
+
+    @GET("videos?key=" + Constants.YOUTUBE_API_KEY + "&chart=mostPopular&part=snippet&maxResults=50")
+    Call<ResponseBody> popular();
 
 }

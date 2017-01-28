@@ -65,9 +65,20 @@ public class TopicsActivity extends AppCompatActivity
                 v.animate().scaleX(1).scaleY(1).start();
                 // TODO: Add item to topics database
                 String topicName = addTopicEditText.getText().toString();
-                topicHelper.createTopic(topicName);
+                topicHelper.createTopic(topicName, new TopicHelper.SaveCallback()
+                {
+                    @Override
+                    public void onSuccess()
+                    {
+                        getTopics();
+                    }
 
-                getTopics();
+                    @Override
+                    public void onFail(String errorMessage)
+                    {
+                        Toast.makeText(TopicsActivity.this, errorMessage, Toast.LENGTH_LONG).show();
+                    }
+                });
             }
         });
 
@@ -77,7 +88,20 @@ public class TopicsActivity extends AppCompatActivity
     private void getTopics()
     {
 
-        topicsAdapter.swap(topicHelper.getTopics());
+        topicHelper.getTopics(new TopicHelper.GetCallback()
+        {
+            @Override
+            public void onResult(ArrayList<Topic> topics)
+            {
+                topicsAdapter.swap(topics);
+            }
+
+            @Override
+            public void onFail(String failMessage)
+            {
+                Toast.makeText(TopicsActivity.this, failMessage, Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     @Override

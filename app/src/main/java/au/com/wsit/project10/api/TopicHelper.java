@@ -4,15 +4,18 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.parse.FindCallback;
+import com.parse.Parse;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+import com.parse.SaveCallback;
+import com.squareup.picasso.Callback;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import au.com.wsit.project10.model.Result;
 import au.com.wsit.project10.model.Topic;
 import au.com.wsit.project10.utils.Constants;
 
@@ -23,56 +26,120 @@ import au.com.wsit.project10.utils.Constants;
 public class TopicHelper
 {
     private static final String TAG = TopicHelper.class.getSimpleName();
-    private SharedPreferences sharedPreferences;
-    private SharedPreferences.Editor editor;
+    private Context context;
+
+    public interface GetCallback
+    {
+        void onResult(ArrayList<Topic> topics);
+        void onFail(String failMessage);
+    }
+
+    public interface SaveCallback
+    {
+        void onSuccess();
+        void onFail(String errorMessage);
+    }
 
     public TopicHelper(Context context)
     {
-        this.sharedPreferences = context.getSharedPreferences(Constants.PREFERENCES_FILE, Context.MODE_PRIVATE);
-        this.editor = sharedPreferences.edit();
-
+        this.context = context;
     }
 
-    public ArrayList<Topic> getTopics()
+    public void getTopics(final GetCallback callback)
     {
-        String jsonTopics = sharedPreferences.getString(Constants.TOPICS_CLASS, "");
-        Gson gson = new Gson();
 
-        ArrayList<Topic> topicArrayList = gson.fromJson(jsonTopics, new TypeToken<List<Topic>>(){
+        final ArrayList<Topic> topics = new ArrayList<>();
 
-        }.getType());
-
-        if(topicArrayList != null)
+        ParseQuery<ParseObject> parseQuery = ParseQuery.getQuery(Constants.TOPICS_CLASS);
+        parseQuery.findInBackground(new FindCallback<ParseObject>()
         {
-            return topicArrayList;
-        }
-        else
-        {
-            ArrayList<Topic> topicArrayListEmpty = new ArrayList<>();
-            return  topicArrayListEmpty;
-        }
 
+            @Override
+            public void done(List<ParseObject> objects, ParseException e)
+            {
+                if(e == null)
+                {
+                    for (ParseObject object : objects)
+                    {
+                        Topic topic = new Topic();
+                        ArrayList<Result> videos = new ArrayList<>();
+
+                        String topicName = object.getString(Constants.TOPIC_NAME);
+                        String topicID = object.getObjectId();
+                        String videosList = (String) object.get(Constants.VIDEO_ID);
+
+                        Log.i(TAG, "VideosList is: " + videosList);
+
+                        topic.setTopicName(topicName);
+                        topic.setTopicId(topicID);
+
+                        topics.add(topic);
+
+                    }
+
+                    callback.onResult(topics);
+                }
+                else
+                {
+                    callback.onFail(e.getMessage());
+                }
+
+            }
+        });
     }
 
-    public void createTopic(String topicName)
+    public void createTopic(String topicName, final SaveCallback callback)
     {
-        // Get the topics first
-        ArrayList<Topic> topicArrayList = getTopics();
-
-        Topic topic = new Topic();
-        topic.setTopicName(topicName);
-        topicArrayList.add(topic);
-
-        Gson gson = new Gson();
-        String json = gson.toJson(topicArrayList);
-
-        editor.putString(Constants.TOPICS_CLASS, json);
-        editor.apply();
+        ParseObject parseObject = new ParseObject(Constants.TOPICS_CLASS);
+        parseObject.put(Constants.TOPIC_NAME, topicName);
+        parseObject.saveInBackground(new com.parse.SaveCallback()
+        {
+            @Override
+            public void done(ParseException e)
+            {
+                if(e == null)
+                {
+                    callback.onSuccess();
+                }
+                else
+                {
+                    callback.onFail(e.getMessage());
+                }
+            }
+        });
     }
 
     // Adds a video to a topic
-   public void addVideo()
+   public void addVideoToTopic(String videoID, String topicId, final SaveCallback callback)
    {
+        ParseQuery<ParseObject> topicQuery = ParseQuery.getQuery(Constants.TOPICS_CLASS);
+       try
+       {
+           ParseObject topic = topicQuery.get(topicId);
+           // Add the videoID to the topic
+           topic.add(Constants.VIDEO_ID, videoID);
+           topic.saveInBackground(new com.parse.SaveCallback()
+           {
+               @Override
+               public void done(ParseException e)
+               {
+                   if(e == null)
+                   {
+                       callback.onSuccess();
+                   }
+                   else
+                   {
+                       callback.onFail(e.getMessage());
+                   }
+
+               }
+           });
+       }
+       catch (ParseException e)
+       {
+           e.printStackTrace();
+           callback.onFail(e.getMessage());
+       }
 
    }
 

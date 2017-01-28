@@ -26,4 +26,5 @@ public class Constants
     public static final String TOPICS_CLASS = "TOPICS";
     public static final String TOPIC_NAME = "TOPIC_NAME";
     public static final String PREFERENCES_FILE = "preferences_file";
+    public static final String LAST_SEARCH_TERM = "LAST_SEARCH_TERM";
 }
