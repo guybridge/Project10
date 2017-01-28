@@ -14,9 +14,15 @@ import retrofit2.http.Query;
 public interface YouTubeApiService
 {
     String YOUTUBE_SEARCH_BASE_URL = "https://www.googleapis.com/youtube/v3/";
+
     // Example
+    //https://www.googleapis.com/youtube/v3/commentThreads?key=AIzaSyBiMZ2eKQ2yKpblyxCm41AjMyvbQhLA3ZI&textFormat=plainText&part=snippet&videoId=kffacxfA7G4&maxResults=50
+
 
     @GET("search?key=" + Constants.YOUTUBE_API_KEY + "&part=snippet&type=video&maxResults=50")
     Call<ResponseBody> results(@Query("q") String query);
+
+    @GET("commentThreads?key=" + Constants.YOUTUBE_API_KEY + "&textFormat=plainText&part=snippet&maxResults=30")
+    Call<ResponseBody> comments(@Query("videoId") String videoId);
 
 }

@@ -81,7 +81,6 @@ public class MainActivity extends AppCompatActivity
             @Override
             public boolean onQueryTextSubmit(String query)
             {
-                Toast.makeText(MainActivity.this, "Searching: " + searchView.getQuery(), Toast.LENGTH_LONG).show();
                 toggleProgress();
                 searchView.clearFocus();
                 search(searchView.getQuery().toString());

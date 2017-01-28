@@ -19,4 +19,8 @@ public class Constants
     public static final String THUMBNAILS = "thumbnails";
     public static final String HIGH = "high";
     public static final String URL = "url";
+    public static final String TOP_LEVEL_COMMENT = "topLevelComment";
+    public static final String AUTHOR_DISPLAY_NAME = "authorDisplayName";
+    public static final String AUTHOR_IMAGE = "authorProfileImageUrl";
+    public static final String TEXT_DISPLAY = "textDisplay";
 }

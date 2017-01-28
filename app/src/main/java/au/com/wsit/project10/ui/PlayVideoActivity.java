@@ -14,7 +14,11 @@ import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerView;
 
+import java.util.ArrayList;
+
 import au.com.wsit.project10.R;
+import au.com.wsit.project10.api.CommentsHelper;
+import au.com.wsit.project10.model.Comment;
 import au.com.wsit.project10.utils.Constants;
 
 public class PlayVideoActivity extends YouTubeBaseActivity implements YouTubePlayer.OnInitializedListener
@@ -59,6 +63,22 @@ public class PlayVideoActivity extends YouTubeBaseActivity implements YouTubePla
         // Set the title and description
         videoTitleTextView.setText(videoTitle);
         videoDescriptionTextView.setText(videoDescription);
+
+        CommentsHelper commentsHelper = new CommentsHelper();
+        commentsHelper.getComments(videoID, new CommentsHelper.CommentsCallback()
+        {
+            @Override
+            public void onSuccess(ArrayList<Comment> comments)
+            {
+
+            }
+
+            @Override
+            public void onFail(String failMessage)
+            {
+
+            }
+        });
 
     }
 
