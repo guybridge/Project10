@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -17,9 +18,12 @@ import com.google.android.youtube.player.YouTubePlayerView;
 import java.util.ArrayList;
 
 import au.com.wsit.project10.R;
+import au.com.wsit.project10.adapters.CommentsAdapter;
 import au.com.wsit.project10.api.CommentsHelper;
 import au.com.wsit.project10.model.Comment;
 import au.com.wsit.project10.utils.Constants;
+
+import static android.content.ContentValues.TAG;
 
 public class PlayVideoActivity extends YouTubeBaseActivity implements YouTubePlayer.OnInitializedListener
 {
@@ -28,12 +32,14 @@ public class PlayVideoActivity extends YouTubeBaseActivity implements YouTubePla
     private TextView videoTitleTextView;
     private TextView videoDescriptionTextView;
 
-    private RecyclerView comments;
+    private RecyclerView commentsRecyclerView;
     private LinearLayoutManager layoutManager;
+    private CommentsAdapter commentsAdapter;
 
     private String videoID;
     private String videoTitle;
     private String videoDescription;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -50,10 +56,11 @@ public class PlayVideoActivity extends YouTubeBaseActivity implements YouTubePla
         playerView.initialize(Constants.YOUTUBE_API_KEY, this);
 
         // Comments RecyclerView setup
-        comments = (RecyclerView) findViewById(R.id.commentsRecyclerView);
+        commentsRecyclerView = (RecyclerView) findViewById(R.id.commentsRecyclerView);
         layoutManager = new LinearLayoutManager(this);
-        comments.setLayoutManager(layoutManager);
-
+        commentsRecyclerView.setLayoutManager(layoutManager);
+        commentsAdapter = new CommentsAdapter(this);
+        commentsRecyclerView.setAdapter(commentsAdapter);
         // Get the data from the intent
         Intent intent = getIntent();
         videoID = intent.getStringExtra(Constants.VIDEO_ID);
@@ -64,22 +71,27 @@ public class PlayVideoActivity extends YouTubeBaseActivity implements YouTubePla
         videoTitleTextView.setText(videoTitle);
         videoDescriptionTextView.setText(videoDescription);
 
+        getComments();
+
+    }
+
+    private void getComments()
+    {
         CommentsHelper commentsHelper = new CommentsHelper();
         commentsHelper.getComments(videoID, new CommentsHelper.CommentsCallback()
         {
             @Override
             public void onSuccess(ArrayList<Comment> comments)
             {
-
+                commentsAdapter.swap(comments);
             }
 
             @Override
             public void onFail(String failMessage)
             {
-
+                Log.i(TAG, "Error loading comments " + failMessage);
             }
         });
-
     }
 
     @Override
