@@ -1,44 +1,64 @@
 package au.com.wsit.project10.model;
 
 /**
- * Created by guyb on 28/12/16.
+ * Youtube search results
  */
 
 public class Result
 {
-    private String speakerName;
-    private String sampleComment;
-    private String searchedTerm; // TODO: Highlight
+    private String videoUrl;
+    private String videoTitle;
+    private String videoDescription;
+    private String videoCommentsLink;
+    private String videoID;
 
-    public String getSearchedTerm()
+    public String getVideoID()
     {
-        return searchedTerm;
+        return videoID;
     }
 
-    public void setSearchedTerm(String searchedTerm)
+    public void setVideoID(String videoID)
     {
-        this.searchedTerm = searchedTerm;
+        this.videoID = videoID;
     }
 
-    public String getSampleComment()
+    public String getVideoUrl()
     {
-        return sampleComment;
+        return videoUrl;
     }
 
-    public void setSampleComment(String sampleComment)
+    public void setVideoUrl(String videoUrl)
     {
-        this.sampleComment = sampleComment;
+        this.videoUrl = videoUrl;
     }
 
-    public String getSpeakerName()
+    public String getVideoTitle()
     {
-        return speakerName;
+        return videoTitle;
     }
 
-    public void setSpeakerName(String speakerName)
+    public void setVideoTitle(String videoTitle)
     {
-        this.speakerName = speakerName;
+        this.videoTitle = videoTitle;
     }
 
+    public String getVideoDescription()
+    {
+        return videoDescription;
+    }
 
+    public void setVideoDescription(String videoDescription)
+    {
+        this.videoDescription = videoDescription;
+    }
+
+    public String getVideoCommentsLink()
+    {
+        return videoCommentsLink;
+    }
+
+    public void setVideoCommentsLink(String videoCommentsLink)
+    {
+        this.videoCommentsLink = videoCommentsLink;
+    }
 }

@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="au.com.wsit.project10">
 
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -15,8 +17,20 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
 
-            <meta-data android:name="android.app.searchable"
-                       android:resource="@xml/searchable" />
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable"/>
+        </activity>
+        <activity
+            android:name=".ui.TopicsActivity"
+            android:label="@string/title_activity_topics"
+            android:parentActivityName=".ui.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="au.com.wsit.project10.ui.MainActivity"/>
+        </activity>
+        <activity android:name=".ui.PlayVideoActivity">
         </activity>
     </application>
 

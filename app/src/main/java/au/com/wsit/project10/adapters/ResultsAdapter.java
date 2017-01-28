@@ -60,22 +60,23 @@ public class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.ViewHold
 
     public class ViewHolder extends RecyclerView.ViewHolder
     {
-        private TextView speakerName;
-        private TextView speakerComment;
+        private TextView videoTitle;
+        private TextView videoDescription;
+        private TextView videoComment;
 
         public ViewHolder(View itemView)
         {
             super(itemView);
-            speakerName = (TextView) itemView.findViewById(R.id.speakerName);
-            speakerComment = (TextView) itemView.findViewById(R.id.commentPreview);
+            videoTitle = (TextView) itemView.findViewById(R.id.videoTitle);
+            videoDescription = (TextView) itemView.findViewById(R.id.videoDescription);
+            videoComment = (TextView) itemView.findViewById(R.id.videoComments);
         }
 
         private void bindViewHolder(Result result)
         {
-            speakerName.setText(result.getSpeakerName());
-            speakerComment.setText(result.getSampleComment());
+            videoTitle.setText(result.getVideoTitle());
+            videoDescription.setText(result.getVideoDescription());
 
-            // TODO: Setup highlighting
         }
     }
 }

@@ -17,16 +17,23 @@
 
     <TextView
         android:textSize="18sp"
-        android:id="@+id/speakerName"
-        android:text="John Smith"
+        android:id="@+id/videoTitle"
+        android:text="Android Video"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
     <TextView
-        android:text="This is the comment preview, the searched text will be highlighted."
-        android:id="@+id/commentPreview"
+        android:text="This is the video description"
+        android:id="@+id/videoDescription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
+
+    <TextView
+        android:layout_gravity="end"
+        android:id="@+id/videoComments"
+        android:text="comments"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"/>
 
 </LinearLayout>
 

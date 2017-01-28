@@ -1,26 +1,40 @@
 package au.com.wsit.project10.ui;
 
-import android.support.v7.app.AppCompatActivity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.youtube.player.YouTubeBaseActivity;
+import com.google.android.youtube.player.YouTubeInitializationResult;
+import com.google.android.youtube.player.YouTubePlayer;
+import com.google.android.youtube.player.YouTubePlayerView;
+
+import java.io.IOException;
+import java.util.ArrayList;
+
 import au.com.wsit.project10.R;
-import au.com.wsit.project10.api.CapitolWordsService;
+import au.com.wsit.project10.api.YouTubeApiService;
+import au.com.wsit.project10.model.Result;
+import au.com.wsit.project10.utils.Constants;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 
 public class MainActivity extends AppCompatActivity
 {
 
     private static final String TAG = MainActivity.class.getSimpleName();
-    private TextView errorTextView;
     private ProgressBar resultsProgress;
     private RecyclerView resultsRecycler;
 
@@ -30,23 +44,45 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        errorTextView = (TextView) findViewById(R.id.errorText);
         resultsProgress = (ProgressBar) findViewById(R.id.loadingResultsProgressBar);
         resultsRecycler = (RecyclerView) findViewById(R.id.resultsRecyclerView);
         resultsRecycler.setLayoutManager(new LinearLayoutManager(this));
 
+        search();
 
     }
 
     private void search()
     {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(CapitolWordsService.CAPITOL_WORDS_BASE_URL)
+                .baseUrl(YouTubeApiService.YOUTUBE_SEARCH_BASE_URL)
                 .build();
 
-        CapitolWordsService service = retrofit.create(CapitolWordsService.class);
+        YouTubeApiService service = retrofit.create(YouTubeApiService.class);
 
-        service.results("search term");
+        Call<ResponseBody> searchCall = service.results("android test search");
+        searchCall.enqueue(new Callback<ResponseBody>()
+        {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response)
+            {
+                try
+                {
+                    Log.i(TAG, "Response is: " + response.body().string());
+                }
+                catch (IOException e)
+                {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t)
+            {
+
+            }
+        });
+
     }
 
     private void toggleProgress()
@@ -101,7 +137,15 @@ public class MainActivity extends AppCompatActivity
             case R.id.action_search:
                 // Start search
                 break;
+            case R.id.action_topics:
+                Intent topicsIntent = new Intent(this, TopicsActivity.class);
+                startActivity(topicsIntent);
+                break;
+            case R.id.action_playlists:
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
+
+
 }
