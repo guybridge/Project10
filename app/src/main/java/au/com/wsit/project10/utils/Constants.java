@@ -23,4 +23,7 @@ public class Constants
     public static final String AUTHOR_DISPLAY_NAME = "authorDisplayName";
     public static final String AUTHOR_IMAGE = "authorProfileImageUrl";
     public static final String TEXT_DISPLAY = "textDisplay";
+    public static final String TOPICS_CLASS = "TOPICS";
+    public static final String TOPIC_NAME = "TOPIC_NAME";
+    public static final String PREFERENCES_FILE = "preferences_file";
 }

@@ -9,7 +9,6 @@ public class Result
     private String videoUrl;
     private String videoTitle;
     private String videoDescription;
-    private String videoCommentsLink;
     private String videoID;
 
     public String getVideoID()
@@ -50,15 +49,5 @@ public class Result
     public void setVideoDescription(String videoDescription)
     {
         this.videoDescription = videoDescription;
-    }
-
-    public String getVideoCommentsLink()
-    {
-        return videoCommentsLink;
-    }
-
-    public void setVideoCommentsLink(String videoCommentsLink)
-    {
-        this.videoCommentsLink = videoCommentsLink;
     }
 }

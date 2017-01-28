@@ -47,6 +47,7 @@ public class PlayVideoActivity extends YouTubeBaseActivity implements YouTubePla
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play_video);
 
+
         // Title and decription setup
         videoTitleTextView = (TextView) findViewById(R.id.videoTitle);
         videoDescriptionTextView = (TextView) findViewById(R.id.videoDescription);

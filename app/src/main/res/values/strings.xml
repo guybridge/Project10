@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Buddy</string>
     <string name="search_hint">Search</string>
-    <string name="title_activity_topics">TopicsActivity</string>
+    <string name="title_activity_topics">Topics</string>
     <string name="player_error">Error initializing YouTube player: %s</string>
     <string name="seek_to">Jump To</string>
     <string name="seek_to_hint">Seconds</string>
