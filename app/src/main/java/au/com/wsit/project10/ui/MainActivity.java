@@ -22,6 +22,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import au.com.wsit.project10.R;
+import au.com.wsit.project10.adapters.ResultsAdapter;
+import au.com.wsit.project10.api.SearchHelper;
 import au.com.wsit.project10.api.YouTubeApiService;
 import au.com.wsit.project10.model.Result;
 import au.com.wsit.project10.utils.Constants;
@@ -37,6 +39,7 @@ public class MainActivity extends AppCompatActivity
     private static final String TAG = MainActivity.class.getSimpleName();
     private ProgressBar resultsProgress;
     private RecyclerView resultsRecycler;
+    private ResultsAdapter resultsAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -47,43 +50,11 @@ public class MainActivity extends AppCompatActivity
         resultsProgress = (ProgressBar) findViewById(R.id.loadingResultsProgressBar);
         resultsRecycler = (RecyclerView) findViewById(R.id.resultsRecyclerView);
         resultsRecycler.setLayoutManager(new LinearLayoutManager(this));
-
-        search();
-
-    }
-
-    private void search()
-    {
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(YouTubeApiService.YOUTUBE_SEARCH_BASE_URL)
-                .build();
-
-        YouTubeApiService service = retrofit.create(YouTubeApiService.class);
-
-        Call<ResponseBody> searchCall = service.results("android test search");
-        searchCall.enqueue(new Callback<ResponseBody>()
-        {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response)
-            {
-                try
-                {
-                    Log.i(TAG, "Response is: " + response.body().string());
-                }
-                catch (IOException e)
-                {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t)
-            {
-
-            }
-        });
+        resultsAdapter = new ResultsAdapter(this);
+        resultsRecycler.setAdapter(resultsAdapter);
 
     }
+
 
     private void toggleProgress()
     {
@@ -113,7 +84,7 @@ public class MainActivity extends AppCompatActivity
                 Toast.makeText(MainActivity.this, "Searching: " + searchView.getQuery(), Toast.LENGTH_LONG).show();
                 toggleProgress();
                 searchView.clearFocus();
-                // TODO: Start search function
+                search(searchView.getQuery().toString());
                 return true;
             }
 
@@ -125,6 +96,27 @@ public class MainActivity extends AppCompatActivity
         });
 
         return true;
+    }
+
+    // Start a search using the API call
+    public void search(String term)
+    {
+        SearchHelper searchHelper = new SearchHelper();
+        searchHelper.search(term, new SearchHelper.SearchCallback()
+        {
+            @Override
+            public void onSuccess(ArrayList<Result> results)
+            {
+                toggleProgress();
+                resultsAdapter.swap(results);
+            }
+
+            @Override
+            public void onFail(String errorMessage)
+            {
+                toggleProgress();
+            }
+        });
     }
 
     @Override

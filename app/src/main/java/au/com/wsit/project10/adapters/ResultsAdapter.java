@@ -1,17 +1,28 @@
 package au.com.wsit.project10.adapters;
 
 
+import android.app.Activity;
+import android.app.ActivityOptions;
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
 import au.com.wsit.project10.R;
 import au.com.wsit.project10.model.Result;
+import au.com.wsit.project10.ui.PlayVideoActivity;
+import au.com.wsit.project10.utils.Constants;
+
+import static android.content.ContentValues.TAG;
 
 /**
  * Created by guyb on 28/12/16.
@@ -20,12 +31,11 @@ import au.com.wsit.project10.model.Result;
 public class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.ViewHolder>
 {
     private Context context;
-    private ArrayList<Result> results;
+    private ArrayList<Result> results = new ArrayList<>();
 
-    public ResultsAdapter(Context context, ArrayList<Result> results)
+    public ResultsAdapter(Context context)
     {
         this.context = context;
-        this.results = results;
     }
 
     @Override
@@ -62,21 +72,45 @@ public class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.ViewHold
     {
         private TextView videoTitle;
         private TextView videoDescription;
-        private TextView videoComment;
+        private ImageView videoImageView;
 
         public ViewHolder(View itemView)
         {
             super(itemView);
             videoTitle = (TextView) itemView.findViewById(R.id.videoTitle);
             videoDescription = (TextView) itemView.findViewById(R.id.videoDescription);
-            videoComment = (TextView) itemView.findViewById(R.id.videoComments);
+            videoImageView = (ImageView) itemView.findViewById(R.id.resultImageView);
         }
 
-        private void bindViewHolder(Result result)
+        private void bindViewHolder(final Result result)
         {
             videoTitle.setText(result.getVideoTitle());
             videoDescription.setText(result.getVideoDescription());
+            Picasso.with(context).load(result.getVideoUrl()).into(videoImageView);
 
+            itemView.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+                    // Start an intent to the player detail activity
+                    Intent intent = new Intent(context, PlayVideoActivity.class);
+                    intent.putExtra(Constants.VIDEO_TITLE, result.getVideoTitle());
+                    intent.putExtra(Constants.VIDEO_DESCRIPTION, result.getVideoDescription());
+                    intent.putExtra(Constants.VIDEO_ID, result.getVideoID());
+
+                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP)
+                    {
+                        ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation((Activity)context, videoImageView, context.getString(R.string.imageTransition));
+                        context.startActivity(intent, options.toBundle());
+                    }
+                    else
+                    {
+                        context.startActivity(intent);
+                    }
+
+                }
+            });
         }
     }
 }
