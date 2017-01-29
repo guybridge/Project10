@@ -1,32 +1,42 @@
 package au.com.wsit.project10.adapters;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
 import au.com.wsit.project10.R;
+import au.com.wsit.project10.api.TopicHelper;
 import au.com.wsit.project10.model.Topic;
-import au.com.wsit.project10.ui.TopicVideosActivity;
-import au.com.wsit.project10.utils.Constants;
 
 /**
  * Created by guyb on 28/01/17.
  */
 
-public class TopicsAdapter extends RecyclerView.Adapter<TopicsAdapter.ViewHolder>
+public class AddToTopicsAdapter extends RecyclerView.Adapter<AddToTopicsAdapter.ViewHolder>
 {
+    private static final String TAG = AddToTopicsAdapter.class.getSimpleName();
     private ArrayList<Topic> topics = new ArrayList<>();
     private Context context;
+    private String videoId;
+    private String videoName;
+    private String videoDescription;
+    private String videoImageUrl;
 
-    public TopicsAdapter(Context context)
+    public AddToTopicsAdapter(Context context,String videoName, String videoDescription, String videoId, String videoImageUrl)
     {
         this.context = context;
+        this.videoId = videoId;
+        this.videoName = videoName;
+        this.videoDescription = videoDescription;
+        this.videoImageUrl = videoImageUrl;
     }
 
     @Override
@@ -81,11 +91,26 @@ public class TopicsAdapter extends RecyclerView.Adapter<TopicsAdapter.ViewHolder
                 @Override
                 public void onClick(View v)
                 {
-                    // Open an activity to show the videos in the topics list
-                    Intent videoTopics = new Intent(context, TopicVideosActivity.class);
-                    videoTopics.putExtra(Constants.TOPIC_ID, topic.getTopicId());
-                    videoTopics.putExtra(Constants.TOPIC_NAME, topic.getTopicName());
-                    context.startActivity(videoTopics);
+                    // Add the clicked item to a topic
+                    TopicHelper topicHelper = new TopicHelper(context);
+                    topicHelper.addVideoToTopic(videoImageUrl, videoName, videoDescription, videoId, topic.getTopicId(), new TopicHelper.SaveCallback()
+                    {
+                        @Override
+                        public void onSuccess()
+                        {
+                            Log.i(TAG, "Successully added " + videoId + " to " + topic.getTopicName());
+                            Toast.makeText(context, "Added video to " + topic.getTopicName(), Toast.LENGTH_LONG).show();
+                        }
+
+                        @Override
+                        public void onFail(String errorMessage)
+                        {
+
+                        }
+                    });
+
+
+
                 }
             });
         }

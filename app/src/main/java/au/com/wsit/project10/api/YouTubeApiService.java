@@ -30,7 +30,4 @@ public interface YouTubeApiService
     @GET("commentThreads?key=" + Constants.YOUTUBE_API_KEY + "&textFormat=plainText&part=snippet&maxResults=30")
     Call<ResponseBody> comments(@Query("videoId") String videoId);
 
-    @GET("videos?key=" + Constants.YOUTUBE_API_KEY + "&chart=mostPopular&part=snippet&maxResults=50")
-    Call<ResponseBody> popular();
-
 }

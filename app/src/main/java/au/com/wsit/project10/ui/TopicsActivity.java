@@ -103,21 +103,4 @@ public class TopicsActivity extends AppCompatActivity
             }
         });
     }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
-        getMenuInflater().inflate(R.menu.menu_topics, menu);
-
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
-
-        int id = item.getItemId();
-
-        return super.onOptionsItemSelected(item);
-    }
 }

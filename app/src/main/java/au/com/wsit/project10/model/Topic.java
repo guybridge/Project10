@@ -11,6 +11,17 @@ public class Topic
     private String topicName;
     private String topicId;
     private ArrayList<Result> topicVideosList;
+    private int videoCount;
+
+    public int getVideoCount()
+    {
+        return videoCount;
+    }
+
+    public void setVideoCount(int videoCount)
+    {
+        this.videoCount = videoCount;
+    }
 
     public String getTopicName()
     {

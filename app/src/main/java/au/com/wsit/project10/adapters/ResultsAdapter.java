@@ -3,8 +3,11 @@ package au.com.wsit.project10.adapters;
 
 import android.app.Activity;
 import android.app.ActivityOptions;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,6 +22,7 @@ import java.util.ArrayList;
 
 import au.com.wsit.project10.R;
 import au.com.wsit.project10.model.Result;
+import au.com.wsit.project10.ui.AddTopicDialog;
 import au.com.wsit.project10.ui.PlayVideoActivity;
 import au.com.wsit.project10.utils.Constants;
 
@@ -73,6 +77,7 @@ public class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.ViewHold
         private TextView videoTitle;
         private TextView videoDescription;
         private ImageView videoImageView;
+        private ImageView topicAddButton;
 
         public ViewHolder(View itemView)
         {
@@ -80,6 +85,7 @@ public class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.ViewHold
             videoTitle = (TextView) itemView.findViewById(R.id.videoTitle);
             videoDescription = (TextView) itemView.findViewById(R.id.videoDescription);
             videoImageView = (ImageView) itemView.findViewById(R.id.resultImageView);
+            topicAddButton = (ImageView)itemView.findViewById(R.id.topicAddButton);
         }
 
         private void bindViewHolder(final Result result)
@@ -111,6 +117,37 @@ public class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.ViewHold
 
                 }
             });
+
+            topicAddButton.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+                    v.setScaleX(0);
+                    v.setScaleY(0);
+                    v.animate().scaleX(1).scaleY(1).start();
+
+                    // Start the dialog
+                    showDialog(result.getVideoTitle(), result.getVideoDescription(), result.getVideoID(), result.getVideoUrl());
+
+                }
+            });
         }
+    }
+
+    private void showDialog(String videoName, String videoDescription, String videoID, String videoUrl)
+    {
+        Activity activity = (Activity) context;
+
+        Bundle bundle = new Bundle();
+        bundle.putString(Constants.VIDEO_ID, videoID);
+        bundle.putString(Constants.VIDEO_DESCRIPTION, videoDescription);
+        bundle.putString(Constants.VIDEO_TITLE, videoName);
+        bundle.putString(Constants.VIDEO_IMAGE_URL, videoUrl);
+
+        FragmentManager fm = activity.getFragmentManager();
+        AddTopicDialog addTopic = new AddTopicDialog();
+        addTopic.setArguments(bundle);
+        addTopic.show(fm, "AddTopicDialog");
     }
 }

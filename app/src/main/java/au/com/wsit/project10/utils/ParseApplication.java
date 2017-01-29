@@ -17,7 +17,12 @@ public class ParseApplication extends Application
     {
         super.onCreate();
         Parse.enableLocalDatastore(getApplicationContext());
-        Parse.initialize(this, "YOUR_APP_ID", "YOUR_CLIENT_KEY");
+        Parse.initialize(new Parse.Configuration.Builder(this)
+                .applicationId("AY3MjS6zo6HWQ6k1eNVSWjHHrGTT02ZMR7iS6JBj")
+                .clientKey("d1IXpTGOOz7H1Q85BPtkjmE6GkzkrtIZk9OmNHSD")
+                .server("https://parseapi.back4app.com/").build()
+        );
+
         ParseUser.enableAutomaticUser();
         ParseACL defaultACL = new ParseACL();
         ParseACL.setDefaultACL(defaultACL, true);

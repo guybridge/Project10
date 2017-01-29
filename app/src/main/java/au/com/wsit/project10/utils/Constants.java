@@ -27,4 +27,7 @@ public class Constants
     public static final String TOPIC_NAME = "TOPIC_NAME";
     public static final String PREFERENCES_FILE = "preferences_file";
     public static final String LAST_SEARCH_TERM = "LAST_SEARCH_TERM";
+    public static final String TOPIC_ID = "TOPIC_ID";
+    public static final String VIDEO_IMAGE_URL = "VIDEO_IMAGE_URL";
+
 }

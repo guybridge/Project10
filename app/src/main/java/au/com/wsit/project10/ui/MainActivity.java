@@ -8,33 +8,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
-import com.google.android.youtube.player.YouTubeBaseActivity;
-import com.google.android.youtube.player.YouTubeInitializationResult;
-import com.google.android.youtube.player.YouTubePlayer;
-import com.google.android.youtube.player.YouTubePlayerView;
-
-import java.io.IOException;
 import java.util.ArrayList;
 
 import au.com.wsit.project10.R;
 import au.com.wsit.project10.adapters.ResultsAdapter;
-import au.com.wsit.project10.api.PopularHelper;
 import au.com.wsit.project10.api.SearchHelper;
-import au.com.wsit.project10.api.YouTubeApiService;
 import au.com.wsit.project10.model.Result;
 import au.com.wsit.project10.utils.Constants;
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
 
 public class MainActivity extends AppCompatActivity
 {
