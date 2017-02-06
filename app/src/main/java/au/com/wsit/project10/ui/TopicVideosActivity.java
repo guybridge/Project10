@@ -50,7 +50,15 @@ public class TopicVideosActivity extends AppCompatActivity
     {
         TopicHelper topicHelper = new TopicHelper(this);
         topicHelper.getTopicVideosByTopicId(topicID);
-        topicHelper.asVideoObersable().subscribe(videosAdapter);
+        try
+        {
+            topicHelper.asVideoObersable().subscribe(videosAdapter);
+
+        }
+        catch (NullPointerException e)
+        {
+            Log.i(TAG, "Error observing " + e.getMessage());
+        }
 
     }
 }
