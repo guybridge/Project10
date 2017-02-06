@@ -14,10 +14,4 @@
         android:icon="@mipmap/ic_topics"
         app:showAsAction="always">
     </item>
-    <item
-        android:title="Playlists"
-        android:id="@+id/action_playlists"
-        android:icon="@mipmap/ic_playlist"
-        app:showAsAction="always">
-    </item>
 </menu>

@@ -83,7 +83,7 @@ public class TopicHelper
             callback.onResult(videos);
 
         }
-        catch (ParseException e)
+        catch (RuntimeException | ParseException e)
         {
             e.printStackTrace();
             callback.onFail(e.getMessage());

@@ -131,8 +131,6 @@ public class MainActivity extends AppCompatActivity
                 Intent topicsIntent = new Intent(this, TopicsActivity.class);
                 startActivity(topicsIntent);
                 break;
-            case R.id.action_playlists:
-                break;
         }
         return super.onOptionsItemSelected(item);
     }
