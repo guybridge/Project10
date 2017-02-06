@@ -79,20 +79,9 @@ public class PlayVideoActivity extends YouTubeBaseActivity implements YouTubePla
     private void getComments()
     {
         CommentsHelper commentsHelper = new CommentsHelper();
-        commentsHelper.getComments(videoID, new CommentsHelper.CommentsCallback()
-        {
-            @Override
-            public void onSuccess(ArrayList<Comment> comments)
-            {
-                commentsAdapter.swap(comments);
-            }
+        commentsHelper.getComments(videoID);
 
-            @Override
-            public void onFail(String failMessage)
-            {
-                Log.i(TAG, "Error loading comments " + failMessage);
-            }
-        });
+        commentsHelper.asObservable().subscribe(commentsAdapter);
     }
 
     @Override

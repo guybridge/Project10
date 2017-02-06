@@ -1,5 +1,7 @@
 package au.com.wsit.project10.model;
 
+import rx.subjects.ReplaySubject;
+
 /**
  * Youtube search results
  */

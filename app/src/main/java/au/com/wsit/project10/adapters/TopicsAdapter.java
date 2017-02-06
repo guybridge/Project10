@@ -14,12 +14,13 @@ import au.com.wsit.project10.R;
 import au.com.wsit.project10.model.Topic;
 import au.com.wsit.project10.ui.TopicVideosActivity;
 import au.com.wsit.project10.utils.Constants;
+import rx.functions.Action1;
 
 /**
  * Created by guyb on 28/01/17.
  */
 
-public class TopicsAdapter extends RecyclerView.Adapter<TopicsAdapter.ViewHolder>
+public class TopicsAdapter extends RecyclerView.Adapter<TopicsAdapter.ViewHolder> implements Action1<ArrayList<Topic>>
 {
     private ArrayList<Topic> topics = new ArrayList<>();
     private Context context;
@@ -43,19 +44,17 @@ public class TopicsAdapter extends RecyclerView.Adapter<TopicsAdapter.ViewHolder
         holder.bindViewHolder(topics.get(position));
     }
 
-    public void swap(ArrayList<Topic> topics)
-    {
-        if(topics != null)
-        {
-            this.topics = topics;
-            notifyDataSetChanged();
-        }
-    }
-
     @Override
     public int getItemCount()
     {
         return topics.size();
+    }
+
+    @Override
+    public void call(ArrayList<Topic> topics)
+    {
+        this.topics = topics;
+        notifyDataSetChanged();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder

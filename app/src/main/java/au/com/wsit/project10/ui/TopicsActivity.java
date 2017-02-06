@@ -38,6 +38,7 @@ public class TopicsActivity extends AppCompatActivity
     private RecyclerView topicsRecyclerView;
     private TopicsAdapter topicsAdapter;
     private TopicHelper topicHelper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -88,19 +89,7 @@ public class TopicsActivity extends AppCompatActivity
     private void getTopics()
     {
 
-        topicHelper.getTopics(new TopicHelper.GetCallback()
-        {
-            @Override
-            public void onResult(ArrayList<Topic> topics)
-            {
-                topicsAdapter.swap(topics);
-            }
-
-            @Override
-            public void onFail(String failMessage)
-            {
-                Toast.makeText(TopicsActivity.this, failMessage, Toast.LENGTH_LONG).show();
-            }
-        });
+        topicHelper.getTopics();
+        topicHelper.asObersable().subscribe(topicsAdapter);
     }
 }

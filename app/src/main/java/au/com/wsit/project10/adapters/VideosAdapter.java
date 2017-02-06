@@ -20,7 +20,6 @@ import java.util.ArrayList;
 
 import au.com.wsit.project10.R;
 import au.com.wsit.project10.model.Result;
-import au.com.wsit.project10.model.Topic;
 import au.com.wsit.project10.ui.AddTopicDialog;
 import au.com.wsit.project10.ui.PlayVideoActivity;
 import au.com.wsit.project10.utils.Constants;
@@ -30,20 +29,20 @@ import rx.functions.Action1;
  * Created by guyb on 28/12/16.
  */
 
-public class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.ViewHolder>
+public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.ViewHolder>
         implements
         Action1<ArrayList<Result>>
 {
     private Context context;
     private ArrayList<Result> results = new ArrayList<>();
 
-    public ResultsAdapter(Context context)
+    public VideosAdapter(Context context)
     {
         this.context = context;
     }
 
     @Override
-    public ResultsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
+    public VideosAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
     {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.result_item, parent, false);
         ViewHolder viewHolder = new ViewHolder(view);
@@ -51,7 +50,7 @@ public class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.ViewHold
     }
 
     @Override
-    public void onBindViewHolder(ResultsAdapter.ViewHolder holder, int position)
+    public void onBindViewHolder(VideosAdapter.ViewHolder holder, int position)
     {
         holder.bindViewHolder(results.get(position));
     }

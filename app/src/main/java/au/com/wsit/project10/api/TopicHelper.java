@@ -20,6 +20,8 @@ import java.util.StringTokenizer;
 import au.com.wsit.project10.model.Result;
 import au.com.wsit.project10.model.Topic;
 import au.com.wsit.project10.utils.Constants;
+import rx.Observable;
+import rx.subjects.ReplaySubject;
 
 /**
  * Created by guyb on 28/01/17.
@@ -29,18 +31,14 @@ public class TopicHelper
 {
     private static final String TAG = TopicHelper.class.getSimpleName();
     private Context context;
+    ReplaySubject<ArrayList<Topic>> notifier = ReplaySubject.create();
+    ReplaySubject<ArrayList<Result>> videoNotifier = ReplaySubject.create();
 
-    public interface GetCallback
-    {
-        void onResult(ArrayList<Topic> topics);
-        void onFail(String failMessage);
-    }
-
-    public interface GetVideosCallback
-    {
-        void onResult(ArrayList<Result> videos);
-        void onFail(String failMessage);
-    }
+//    public interface GetVideosCallback
+//    {
+//        void onResult(ArrayList<Result> videos);
+//        void onFail(String failMessage);
+//    }
 
     public interface SaveCallback
     {
@@ -53,7 +51,7 @@ public class TopicHelper
         this.context = context;
     }
 
-    public void getTopicVideosByTopicId(String topicId, GetVideosCallback callback)
+    public void getTopicVideosByTopicId(String topicId)
     {
 
         ParseQuery<ParseObject> query = ParseQuery.getQuery(Constants.TOPICS_CLASS);
@@ -80,18 +78,18 @@ public class TopicHelper
                 videos.add(video);
             }
 
-            callback.onResult(videos);
+            videoNotifier.onNext(videos);
 
         }
         catch (RuntimeException | ParseException e)
         {
             e.printStackTrace();
-            callback.onFail(e.getMessage());
+            videoNotifier.onError(e);
         }
     }
 
     // Get a list of topics
-    public void getTopics(final GetCallback callback)
+    public void getTopics()
     {
 
         final ArrayList<Topic> topics = new ArrayList<>();
@@ -149,11 +147,11 @@ public class TopicHelper
 
                     }
 
-                    callback.onResult(topics);
+                    notifier.onNext(topics);
                 }
                 else
                 {
-                    callback.onFail(e.getMessage());
+                    notifier.onError(e);
                 }
 
             }
@@ -220,5 +218,15 @@ public class TopicHelper
        }
 
    }
+
+    public Observable<ArrayList<Topic>> asObersable()
+    {
+        return notifier;
+    }
+
+    public Observable<ArrayList<Result>> asVideoObersable()
+    {
+        return videoNotifier;
+    }
 
 }

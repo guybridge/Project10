@@ -1,17 +1,19 @@
 package au.com.wsit.project10.api;
 
-import android.support.v7.widget.SearchView;
-import android.util.Log;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
+import au.com.wsit.project10.json.JsonHelper;
 import au.com.wsit.project10.model.Result;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
+import rx.Observable;
+import rx.subjects.ReplaySubject;
+
 
 /**
  * Created by guyb on 28/01/17.
@@ -20,14 +22,9 @@ import retrofit2.Retrofit;
 public class SearchHelper
 {
     private static final String TAG = SearchHelper.class.getSimpleName();
+    ReplaySubject<ArrayList<Result>> notifier = ReplaySubject.create();
 
-    public interface SearchCallback
-    {
-        void onSuccess(ArrayList<Result> results);
-        void onFail(String errorMessage);
-    }
-
-    public void search(String searchTerm, final SearchCallback callback)
+    public void search(String searchTerm)
     {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(YouTubeApiService.YOUTUBE_SEARCH_BASE_URL)
@@ -44,7 +41,7 @@ public class SearchHelper
                 try
                 {
                     ArrayList<Result> results = JsonHelper.parseResults(response.body().string());
-                    callback.onSuccess(results);
+                    notifier.onNext(results);
                 }
                 catch (IOException e)
                 {
@@ -55,9 +52,14 @@ public class SearchHelper
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t)
             {
-                callback.onFail(t.getMessage());
+                notifier.onError(t);
             }
         });
 
+    }
+
+    public Observable<ArrayList<Result>> asObservable()
+    {
+        return notifier;
     }
 }

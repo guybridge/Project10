@@ -59,19 +59,7 @@ public class AddTopicDialog extends DialogFragment
     private void getTopics()
     {
 
-        topicHelper.getTopics(new TopicHelper.GetCallback()
-        {
-            @Override
-            public void onResult(ArrayList<Topic> topics)
-            {
-                addToTopicsAdapter.swap(topics);
-            }
-
-            @Override
-            public void onFail(String failMessage)
-            {
-                Toast.makeText(getActivity(), failMessage, Toast.LENGTH_LONG).show();
-            }
-        });
+        topicHelper.getTopics();
+        topicHelper.asObersable().subscribe(addToTopicsAdapter);
     }
 }

@@ -12,16 +12,19 @@ import java.util.ArrayList;
 
 import au.com.wsit.project10.R;
 import au.com.wsit.project10.adapters.ResultsAdapter;
+import au.com.wsit.project10.adapters.TopicsAdapter;
+import au.com.wsit.project10.adapters.VideosAdapter;
 import au.com.wsit.project10.api.TopicHelper;
 import au.com.wsit.project10.model.Result;
+import au.com.wsit.project10.model.Topic;
 import au.com.wsit.project10.utils.Constants;
+import rx.subjects.ReplaySubject;
 
 public class TopicVideosActivity extends AppCompatActivity
 {
     private static final String TAG = TopicVideosActivity.class.getSimpleName();
-    private ProgressBar resultsProgress;
     private RecyclerView resultsRecycler;
-    private ResultsAdapter resultsAdapter;
+    private VideosAdapter videosAdapter;
     private String topicID;
 
     @Override
@@ -30,11 +33,10 @@ public class TopicVideosActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_topic_videos);
 
-        resultsProgress = (ProgressBar) findViewById(R.id.loadingResultsProgressBar);
         resultsRecycler = (RecyclerView) findViewById(R.id.resultsRecyclerView);
         resultsRecycler.setLayoutManager(new LinearLayoutManager(this));
-        resultsAdapter = new ResultsAdapter(this);
-        resultsRecycler.setAdapter(resultsAdapter);
+        videosAdapter = new VideosAdapter(this);
+        resultsRecycler.setAdapter(videosAdapter);
 
         Intent intent = getIntent();
         String topicName = intent.getStringExtra(Constants.TOPIC_NAME);
@@ -47,20 +49,8 @@ public class TopicVideosActivity extends AppCompatActivity
     private void getVideos()
     {
         TopicHelper topicHelper = new TopicHelper(this);
-        topicHelper.getTopicVideosByTopicId(topicID, new TopicHelper.GetVideosCallback()
-        {
-            @Override
-            public void onResult(ArrayList<Result> videos)
-            {
-                resultsAdapter.swap(videos);
-            }
-
-            @Override
-            public void onFail(String failMessage)
-            {
-
-            }
-        });
+        topicHelper.getTopicVideosByTopicId(topicID);
+        topicHelper.asVideoObersable().subscribe(videosAdapter);
 
     }
 }

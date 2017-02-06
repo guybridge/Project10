@@ -14,12 +14,13 @@ import java.util.ArrayList;
 
 import au.com.wsit.project10.R;
 import au.com.wsit.project10.model.Comment;
+import rx.functions.Action1;
 
 /**
  * Created by guyb on 28/01/17.
  */
 
-public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHolder>
+public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHolder> implements Action1<ArrayList<Comment>>
 {
 
     private Context context;
@@ -44,19 +45,17 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHo
         holder.bindViewHolder(comments.get(position));
     }
 
-    public void swap(ArrayList<Comment> comments)
-    {
-        if(comments != null)
-        {
-            this.comments = comments;
-            notifyDataSetChanged();
-        }
-    }
-
     @Override
     public int getItemCount()
     {
         return comments.size();
+    }
+
+    @Override
+    public void call(ArrayList<Comment> comments)
+    {
+        this.comments = comments;
+        notifyDataSetChanged();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder

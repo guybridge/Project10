@@ -25,7 +25,6 @@ public class MainActivity extends AppCompatActivity
 {
 
     private static final String TAG = MainActivity.class.getSimpleName();
-    private ProgressBar resultsProgress;
     private RecyclerView resultsRecycler;
     private ResultsAdapter resultsAdapter;
     private SharedPreferences sharedPreferences;
@@ -36,7 +35,6 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        resultsProgress = (ProgressBar) findViewById(R.id.loadingResultsProgressBar);
         resultsRecycler = (RecyclerView) findViewById(R.id.resultsRecyclerView);
         resultsRecycler.setLayoutManager(new LinearLayoutManager(this));
         resultsAdapter = new ResultsAdapter(this);
@@ -49,20 +47,6 @@ public class MainActivity extends AppCompatActivity
         // Get the most popular to start with
         search(lastSearchTerm);
 
-
-    }
-
-
-    private void toggleProgress()
-    {
-        if(resultsProgress.getVisibility() == View.GONE)
-        {
-            resultsProgress.setVisibility(View.VISIBLE);
-        }
-        else
-        {
-            resultsProgress.setVisibility(View.GONE);
-        }
 
     }
 
@@ -97,24 +81,11 @@ public class MainActivity extends AppCompatActivity
     public void search(String term)
     {
         sharedPreferences.edit().putString(Constants.LAST_SEARCH_TERM, term).apply();
-        toggleProgress();
 
         SearchHelper searchHelper = new SearchHelper();
-        searchHelper.search(term, new SearchHelper.SearchCallback()
-        {
-            @Override
-            public void onSuccess(ArrayList<Result> results)
-            {
-                toggleProgress();
-                resultsAdapter.swap(results);
-            }
+        searchHelper.search(term);
 
-            @Override
-            public void onFail(String errorMessage)
-            {
-                toggleProgress();
-            }
-        });
+        searchHelper.asObservable().subscribe(resultsAdapter);
     }
 
     @Override
